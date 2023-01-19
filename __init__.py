@@ -16,7 +16,7 @@ md_maintainers = '@stevenxxiu'
 md_lib_dependencies = ['pytz']
 
 TRIGGER = 'tz'
-ICON_PATH = '/usr/share/icons/elementary/categories/64/preferences-system-time.svg'
+ICON_PATH = str(Path(__file__).parent / 'icons/datetime.png')
 
 
 class Plugin(QueryHandler):
