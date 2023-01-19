@@ -1,7 +1,6 @@
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Dict
 
 import pytz
 from albert import Action, Item, Query, QueryHandler, configLocation, setClipboardText  # pylint: disable=import-error
@@ -23,7 +22,7 @@ class Plugin(QueryHandler):
     def __init__(self):
         super().__init__()
         # `{ readable_name: timezone_name }`
-        self.timezones: Dict[str, pytz.timezone] = {}
+        self.timezones: dict[str, pytz.timezone] = {}
 
     def id(self) -> str:
         return __name__
