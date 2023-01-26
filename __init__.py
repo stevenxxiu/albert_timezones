@@ -9,7 +9,7 @@ from albert import Action, Item, Query, QueryHandler, configLocation, setClipboa
 md_iid = '0.5'
 md_version = '1.0'
 md_name = 'Timezones'
-md_description = 'Show times in a list of timezones.'
+md_description = 'Show times in a list of timezones'
 md_url = 'https://github.com/stevenxxiu/albert_timezones'
 md_maintainers = '@stevenxxiu'
 md_lib_dependencies = ['pytz']
