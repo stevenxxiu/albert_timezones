@@ -19,7 +19,7 @@ ICON_PATH = str(Path(__file__).parent / 'icons/datetime.png')
 
 
 class Plugin(QueryHandler):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # `{ readable_name: timezone_name }`
         self.timezones: dict[str, pytz.timezone] = {}
