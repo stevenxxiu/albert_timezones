@@ -14,7 +14,6 @@ md_url = 'https://github.com/stevenxxiu/albert_timezones'
 md_maintainers = '@stevenxxiu'
 md_lib_dependencies = ['pytz']
 
-TRIGGER = 'tz'
 ICON_PATH = str(Path(__file__).parent / 'icons/datetime.png')
 
 
@@ -41,7 +40,7 @@ class Plugin(QueryHandler):
             }
 
     def defaultTrigger(self) -> str:
-        return TRIGGER
+        return 'tz'
 
     def handleQuery(self, query: Query) -> None:
         cur_time = datetime.now()
