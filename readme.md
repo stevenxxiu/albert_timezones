@@ -1,4 +1,6 @@
 # Albert Launcher Timezones Extension
+Show times in a list of timezones.
+
 ## Install
 To install, copy or symlink this directory to `~/.local/share/albert/org.albert.extension.python/modules/timezones/`.
 
