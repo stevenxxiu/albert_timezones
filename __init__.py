@@ -3,44 +3,40 @@ from datetime import datetime
 from pathlib import Path
 
 import pytz
-from albert import Action, Item, TriggerQuery, TriggerQueryHandler, setClipboardText  # pylint: disable=import-error
+from albert import (  # pylint: disable=import-error
+    Action,
+    PluginInstance,
+    StandardItem,
+    TriggerQuery,
+    TriggerQueryHandler,
+    setClipboardText,
+)
 
 
-md_iid = '1.0'
-md_version = '1.1'
+md_iid = '2.0'
+md_version = '1.2'
 md_name = 'Timezones'
 md_description = 'Show times in a list of timezones'
 md_url = 'https://github.com/stevenxxiu/albert_timezones'
 md_maintainers = '@stevenxxiu'
 md_lib_dependencies = ['pytz']
 
-ICON_PATH = str(Path(__file__).parent / 'icons/datetime.png')
+ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
 
 
-class Plugin(TriggerQueryHandler):
-    def __init__(self) -> None:
-        super().__init__()
+class Plugin(PluginInstance, TriggerQueryHandler):
+    def __init__(self):
+        TriggerQueryHandler.__init__(self, id=__name__, name=md_name, description=md_description, defaultTrigger='tz')
+        PluginInstance.__init__(self, extensions=[self])
         # `{ readable_name: timezone_name }`
         self.timezones: dict[str, pytz.timezone] = {}
 
-    def id(self) -> str:
-        return __name__
-
-    def name(self) -> str:
-        return md_name
-
-    def description(self) -> str:
-        return md_description
-
     def initialize(self) -> None:
-        with (Path(self.configLocation()) / 'settings.json').open() as sr:
+        with (self.configLocation / 'settings.json').open() as sr:
             settings = json.load(sr)
             self.timezones = {
                 readable_name: pytz.timezone(timezone_name) for readable_name, timezone_name in settings.items()
             }
-
-    def defaultTrigger(self) -> str:
-        return 'tz'
 
     def handleTriggerQuery(self, query: TriggerQuery) -> None:
         cur_time = datetime.now()
@@ -51,11 +47,11 @@ class Plugin(TriggerQueryHandler):
             copyable = f'{readable_name}: {dest_time_str}'
 
             query.add(
-                Item(
+                StandardItem(
                     id=f'{md_name}/{readable_name}',
                     text=dest_time_str,
                     subtext=readable_name,
-                    icon=[ICON_PATH],
+                    iconUrls=[ICON_URL],
                     actions=[
                         Action(f'{md_name}/{readable_name}', 'Copy', lambda value_=copyable: setClipboardText(value_))
                     ],
