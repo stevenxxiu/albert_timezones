@@ -26,7 +26,7 @@ ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
 
 class Plugin(PluginInstance, TriggerQueryHandler):
     def __init__(self):
-        TriggerQueryHandler.__init__(self, id=__name__, name=md_name, description=md_description, defaultTrigger='tz')
+        TriggerQueryHandler.__init__(self, id=__name__, name=md_name, description=md_description, defaultTrigger='tz ')
         PluginInstance.__init__(self, extensions=[self])
         # `{ readable_name: timezone_name }`
         self.timezones: dict[str, pytz.timezone] = {}
