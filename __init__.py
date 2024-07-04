@@ -7,14 +7,13 @@ from albert import (  # pylint: disable=import-error
     Action,
     PluginInstance,
     StandardItem,
-    TriggerQuery,
     TriggerQueryHandler,
     setClipboardText,
 )
 
 
-md_iid = '2.0'
-md_version = '1.2'
+md_iid = '2.3'
+md_version = '1.3'
 md_name = 'Timezones'
 md_description = 'Show times in a list of timezones'
 md_url = 'https://github.com/stevenxxiu/albert_timezones'
@@ -27,18 +26,17 @@ ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
 class Plugin(PluginInstance, TriggerQueryHandler):
     def __init__(self):
         TriggerQueryHandler.__init__(self, id=__name__, name=md_name, description=md_description, defaultTrigger='tz ')
-        PluginInstance.__init__(self, extensions=[self])
+        PluginInstance.__init__(self)
         # `{ readable_name: timezone_name }`
         self.timezones: dict[str, pytz.timezone] = {}
 
-    def initialize(self) -> None:
         with (self.configLocation / 'settings.json').open() as sr:
             settings = json.load(sr)
             self.timezones = {
                 readable_name: pytz.timezone(timezone_name) for readable_name, timezone_name in settings.items()
             }
 
-    def handleTriggerQuery(self, query: TriggerQuery) -> None:
+    def handleTriggerQuery(self, query) -> None:
         cur_time = datetime.now()
         fmt = '%Y/%m/%d %-I:%M:%S %p %z'
 
