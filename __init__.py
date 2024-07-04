@@ -28,7 +28,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         TriggerQueryHandler.__init__(self, id=__name__, name=md_name, description=md_description, defaultTrigger='tz ')
         PluginInstance.__init__(self)
         # `{ readable_name: timezone_name }`
-        self.timezones: dict[str, pytz.timezone] = {}
+        self.timezones: dict[str, pytz.tzinfo.BaseTzInfo] = {}
 
         with (self.configLocation / 'settings.json').open() as sr:
             settings = json.load(sr)
