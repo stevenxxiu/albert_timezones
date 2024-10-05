@@ -2,7 +2,7 @@
 Show times in a list of timezones.
 
 ## Install
-To install, copy or symlink this directory to `~/.local/share/albert/org.albert.extension.python/modules/timezones/`.
+To install, copy or symlink this directory to `~/.local/share/albert/python/plugins/timezones/`.
 
 ## Config
 Config is stored in `~/.config/albert/albert.timezones/settings.json`.
