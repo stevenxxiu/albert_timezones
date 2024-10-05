@@ -7,7 +7,7 @@ To install, copy or symlink this directory to `~/.local/share/albert/python/plug
 ## Config
 Config is stored in `~/.config/albert/albert.timezones/settings.json`.
 
-Synonyms can be added for `pytz.timezone` timezone names. 
+Synonyms can be added for `pytz.timezone` timezone names.
 
 Example config:
 
