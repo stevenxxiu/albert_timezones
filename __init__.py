@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 
 import pytz
-from albert import (  # pylint: disable=import-error
+from albert import (
     Action,
     PluginInstance,
     StandardItem,
@@ -11,13 +11,13 @@ from albert import (  # pylint: disable=import-error
     setClipboardText,
 )
 
-
-md_iid = '2.3'
-md_version = '1.3'
+md_iid = '3.0'
+md_version = '1.4'
 md_name = 'Timezones'
 md_description = 'Show times in a list of timezones'
+md_license = 'MIT'
 md_url = 'https://github.com/stevenxxiu/albert_timezones'
-md_maintainers = '@stevenxxiu'
+md_authors = ['@stevenxxiu']
 md_lib_dependencies = ['pytz']
 
 ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
@@ -25,16 +25,19 @@ ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
 
 class Plugin(PluginInstance, TriggerQueryHandler):
     def __init__(self):
-        TriggerQueryHandler.__init__(self, id=__name__, name=md_name, description=md_description, defaultTrigger='tz ')
         PluginInstance.__init__(self)
+        TriggerQueryHandler.__init__(self)
         # `{ readable_name: timezone_name }`
         self.timezones: dict[str, pytz.tzinfo.BaseTzInfo] = {}
 
-        with (self.configLocation / 'settings.json').open() as sr:
+        with (self.configLocation() / 'settings.json').open() as sr:
             settings = json.load(sr)
             self.timezones = {
                 readable_name: pytz.timezone(timezone_name) for readable_name, timezone_name in settings.items()
             }
+
+    def defaultTrigger(self):
+        return 'tz '
 
     def handleTriggerQuery(self, query) -> None:
         cur_time = datetime.now()
