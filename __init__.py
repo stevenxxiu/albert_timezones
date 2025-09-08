@@ -1,7 +1,10 @@
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Callable, override
+
+sys.path.insert(1, str(next(Path(__file__).parent.glob('__pypackages__/*/lib'))))
 
 import pytz
 from albert import setClipboardText  # pyright: ignore[reportUnknownVariableType]
@@ -22,7 +25,6 @@ md_description = 'Show times in a list of timezones'
 md_license = 'MIT'
 md_url = 'https://github.com/stevenxxiu/albert_timezones'
 md_authors = ['@stevenxxiu']
-md_lib_dependencies = ['pytz']
 
 ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
 
