@@ -62,7 +62,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
 
             copy_call: Callable[[str], None] = lambda value_=copyable: setClipboardText(value_)  # noqa: E731
             item = StandardItem(
-                id=f'{md_name}/{readable_name}',
+                id=self.id(),
                 text=dest_time_str,
                 subtext=readable_name,
                 iconUrls=[ICON_URL],
