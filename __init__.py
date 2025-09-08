@@ -10,6 +10,7 @@ import pytz
 from albert import setClipboardText  # pyright: ignore[reportUnknownVariableType]
 from albert import (
     Action,
+    Item,
     PluginInstance,
     Query,
     StandardItem,
@@ -46,7 +47,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             }
 
     @override
-    def defaultTrigger(self):
+    def defaultTrigger(self) -> str:
         return 'tz '
 
     @override
@@ -54,17 +55,18 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         cur_time = datetime.now()
         fmt = '%Y/%m/%d %-I:%M:%S %p %z'
 
+        items: list[Item] = []
         for readable_name, timezone in self.timezones.items():
             dest_time_str = cur_time.astimezone(timezone).strftime(fmt).lower()
             copyable = f'{readable_name}: {dest_time_str}'
 
             copy_call: Callable[[str], None] = lambda value_=copyable: setClipboardText(value_)  # noqa: E731
-            query.add(  # pyright: ignore[reportUnknownMemberType]
-                StandardItem(
-                    id=f'{md_name}/{readable_name}',
-                    text=dest_time_str,
-                    subtext=readable_name,
-                    iconUrls=[ICON_URL],
-                    actions=[Action(f'{md_name}/{readable_name}', 'Copy', copy_call)],
-                )
+            item = StandardItem(
+                id=f'{md_name}/{readable_name}',
+                text=dest_time_str,
+                subtext=readable_name,
+                iconUrls=[ICON_URL],
+                actions=[Action(f'{md_name}/{readable_name}', 'Copy', copy_call)],
             )
+            items.append(item)
+        query.add(items)  # pyright: ignore[reportUnknownMemberType]
