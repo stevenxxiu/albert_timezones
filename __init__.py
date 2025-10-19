@@ -15,11 +15,12 @@ from albert import (
     Query,
     StandardItem,
     TriggerQueryHandler,
+    makeImageIcon,
 )
 
 setClipboardText: Callable[[str], None]
 
-md_iid = '3.0'
+md_iid = '4.0'
 md_version = '1.4'
 md_name = 'Timezones'
 md_description = 'Show times in a list of timezones'
@@ -27,7 +28,7 @@ md_license = 'MIT'
 md_url = 'https://github.com/stevenxxiu/albert_timezones'
 md_authors = ['@stevenxxiu']
 
-ICON_URL = f'file:{Path(__file__).parent / "icons/datetime.png"}'
+ICON_PATH = Path(__file__).parent / 'icons/datetime.png'
 
 
 TimezonesSettings = dict[str, str]
@@ -65,7 +66,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 id=self.id(),
                 text=dest_time_str,
                 subtext=readable_name,
-                iconUrls=[ICON_URL],
+                icon_factory=lambda: makeImageIcon(ICON_PATH),
                 actions=[Action(f'{md_name}/{readable_name}', 'Copy', copy_call)],
             )
             items.append(item)
