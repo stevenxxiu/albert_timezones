@@ -63,11 +63,11 @@ class Plugin(PluginInstance, TriggerQueryHandler):
 
             copy_call: Callable[[str], None] = lambda value_=copyable: setClipboardText(value_)  # noqa: E731
             item = StandardItem(
-                id=self.id(),
+                id=readable_name,
                 text=dest_time_str,
                 subtext=readable_name,
                 icon_factory=lambda: makeImageIcon(ICON_PATH),
-                actions=[Action(f'{md_name}/{readable_name}', 'Copy', copy_call)],
+                actions=[Action('copy', 'Copy', copy_call)],
             )
             items.append(item)
         query.add(items)  # pyright: ignore[reportUnknownMemberType]
