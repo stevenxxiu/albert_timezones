@@ -8,10 +8,14 @@ authors = [
 dependencies = [
     'pytz>=2022.7',
 ]
-requires-python = '>=3.12'
+requires-python = '>=3.14'
 license = {text = 'MIT'}
 
 [tool.basedpyright]
+extraPaths = [
+    '__pypackages__/3.14/lib/',
+    '/usr/lib/python3.14/site-packages/pdm/pep582/',
+]
 reportIncompatibleMethodOverride = false
 reportMissingModuleSource = false
 
