@@ -1,27 +1,25 @@
 import json
-import sys
+from collections.abc import Generator
 from datetime import datetime
 from pathlib import Path
 from typing import Callable, override
+from zoneinfo import ZoneInfo
 
-sys.path.insert(1, str(next(Path(__file__).parent.glob('__pypackages__/*/lib'))))
-
-import pytz
 from albert import setClipboardText  # pyright: ignore[reportUnknownVariableType]
 from albert import (
     Action,
+    GeneratorQueryHandler,
+    Icon,
     Item,
     PluginInstance,
-    Query,
+    QueryContext,
     StandardItem,
-    TriggerQueryHandler,
-    makeImageIcon,
 )
 
 setClipboardText: Callable[[str], None]
 
-md_iid = '4.0'
-md_version = '1.4'
+md_iid = '5.0'
+md_version = '1.5'
 md_name = 'Timezones'
 md_description = 'Show times in a list of timezones'
 md_license = 'MIT'
@@ -34,17 +32,17 @@ ICON_PATH = Path(__file__).parent / 'icons/datetime.png'
 TimezonesSettings = dict[str, str]
 
 
-class Plugin(PluginInstance, TriggerQueryHandler):
-    def __init__(self):
+class Plugin(PluginInstance, GeneratorQueryHandler):
+    def __init__(self) -> None:
         PluginInstance.__init__(self)
-        TriggerQueryHandler.__init__(self)
-        # `{ readable_name: timezone_name }`
-        self.timezones: dict[str, pytz.tzinfo.BaseTzInfo] = {}
+        GeneratorQueryHandler.__init__(self)
+        # `{ readable_name: timezone }`
+        self.timezones: dict[str, ZoneInfo] = {}
 
         with (self.configLocation() / 'settings.json').open() as sr:
             settings: TimezonesSettings = json.load(sr)  # pyright: ignore[reportAny]
             self.timezones = {
-                readable_name: pytz.timezone(timezone_name) for readable_name, timezone_name in settings.items()
+                readable_name: ZoneInfo(timezone_name) for readable_name, timezone_name in settings.items()
             }
 
     @override
@@ -52,7 +50,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         return 'tz '
 
     @override
-    def handleTriggerQuery(self, query: Query) -> None:
+    def items(self, ctx: QueryContext) -> Generator[list[Item]]:
         cur_time = datetime.now()
         fmt = '%Y/%m/%d %-I:%M:%S %p %z'
 
@@ -66,8 +64,8 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 id=readable_name,
                 text=dest_time_str,
                 subtext=readable_name,
-                icon_factory=lambda: makeImageIcon(ICON_PATH),
+                icon_factory=lambda: Icon.image(ICON_PATH),
                 actions=[Action('copy', 'Copy', copy_call)],
             )
             items.append(item)
-        query.add(items)  # pyright: ignore[reportUnknownMemberType]
+        yield items
